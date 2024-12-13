@@ -27,7 +27,7 @@ export interface User extends Document{
     verifyCodeExpiry: Date;
     isVerified: boolean;
     isAcceptingMessage: boolean;
-    message: Message[]
+    messages: Message[]
 }
 
 const UserSchema : Schema<User> = new Schema({ // gives only type safty when custom schema is made
@@ -63,7 +63,7 @@ const UserSchema : Schema<User> = new Schema({ // gives only type safty when cus
         type: Boolean,
         default: false,
     },
-    message : [MessageSchema]
+    messages : [MessageSchema]
     
 })
 
