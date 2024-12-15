@@ -60,6 +60,7 @@ export async function POST(request: Request){
                     messages: [],
             })
             await newUser.save()
+            // console.log(newUser);
 
         }
 

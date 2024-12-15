@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+// const DB_NAME = "feedback_app"
 
 type ConnectionObject = {
     isConnected?: number
@@ -11,12 +12,12 @@ async function dbConnect(): Promise<void>{  // in typescript , meaning is void i
         console.log("Already connected to database"); 
         return
     }
+    
 
     try {
-        const db = await mongoose.connect(process.env.MONGODB_URI || ' ' , {})
-
+        const db = await mongoose.connect(`${process.env.MONGODB_URI}`)
         connection.isConnected =  db.connections[0].readyState
-        console.log("DB Connected Successfully")
+        console.log(`DB Connected Successfully ||  DB HOST: ${db.connection.host}`)
         
     } catch (error) {
         console.log("DB Connection failed" , error);
