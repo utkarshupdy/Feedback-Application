@@ -28,13 +28,14 @@ export async function GET(request : Request){
         }
         // validate username with zod
         const result = UsernameQuerySchema.safeParse(queryParams) // it check username and verify it 
-        // console.log(result);
+        console.log(result);
         if (!result.success) {
             const usernameError = result.error.format().username?._errors || []
 
             return Response.json({
                 success : false,
                 message: usernameError?.length > 0 ? usernameError.join(', ') : 'Invalid query parameters' , 
+                // message: "username must be 3 digits long" , 
             } , {status: 400})
         }
         // if username is valid then return success
