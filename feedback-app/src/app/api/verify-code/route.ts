@@ -1,67 +1,71 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 
-export async function POST(request: Request){
-    await dbConnect();
-    try {
-        const {username , code} = await request.json()
-        // data comes from url need to be decoded once to get clean url.. so used decodeuricomponents
-        const decodedUsername = decodeURIComponent(username)
-        const user = await UserModel.findOne({username : decodedUsername})
+export async function POST(request: Request) {
+  await dbConnect();
 
-        if(!user){
-            return Response.json({
-                success: false,
-                message: "Error verifying user"
-            },
-            {
-                status: 500
-            })
-        }
-        const isCodeValid = user.verifyCode === code;
-        const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();
-        if(isCodeValid && isCodeNotExpired){
-            user.isVerified = true;
-            await user.save()
-            return Response.json({
-                success: true,
-                message: "Account Verified Successfully"
-            },
-            {
-                status: 200
-            })
-        }
-        else if(!isCodeNotExpired){
-            return Response.json({
-                success: false,
-                message: "Verify Code Expired! Please sign up again to get new code"
-            },
-            {
-                status: 400
-            })
-        }
-        else{
-            return Response.json({
-                success: false,
-                message: "Incorrect Verification Code"
-            },
-            {
-                status: 400
-            })
-        }
+  try {
+    const { username, code } = await request.json();
 
+    // Decode username if needed
+    const decodedUsername = decodeURIComponent(username);
 
-        
-    } catch (error) {
-        console.error("Error verifying user" , error)
-        return Response.json({
-            success: false,
-            message: "Error verifying user"
-        },
-    {
-        status: 500
-    })
-        
-        
+    // Find user in the database
+    const user = await UserModel.findOne({ username: decodedUsername });
+
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "User not found.",
+        }),
+        { status: 404 }
+      );
     }
+
+    // Validate verification code and expiration
+    const isCodeValid = user.verifyCode === code;
+    const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();
+
+    if (isCodeValid && isCodeNotExpired) {
+      user.isVerified = true;
+      await user.save();
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: "Account verified successfully.",
+        }),
+        { status: 200 }
+      );
+    }
+
+    if (!isCodeNotExpired) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Verification code expired. Please sign up again.",
+        }),
+        { status: 400 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "Incorrect verification code.",
+      }),
+      { status: 400 }
+    );
+  } catch (error) {
+    console.error("Error verifying user:", error);
+
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "Internal server error.",
+      }),
+      { status: 500 }
+    );
+  }
 }

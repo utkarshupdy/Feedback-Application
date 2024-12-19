@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+      "@/schemas/*": ["./src/schemas/*"] ,
       "@/*": ["./src/*"]
     }
   },
