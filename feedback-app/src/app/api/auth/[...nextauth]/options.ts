@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks:{
-    async session({ session, token }) {
+    async session({ session, token }) { // all these data inject in session of user ... not in next-auth session ... to these data can be extracted by user session
         if(token){
             session.user._id = token._id;
             session.user.isVerified = token.isVerified;
