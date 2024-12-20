@@ -1,8 +1,9 @@
 import mongoose , {Schema , Document} from "mongoose";
 
 export interface Message extends Document{
+    _id: string;
     content: string;
-    createdAt: Date
+    createdAt: Date;
 }
 
 const MessageSchema : Schema<Message> = new Schema({ // gives only type safty when custom schema is made
@@ -14,8 +15,7 @@ const MessageSchema : Schema<Message> = new Schema({ // gives only type safty wh
         type: Date,
         required : true,
         default: Date.now 
-    }
-
+    } 
 
 })
 
