@@ -91,9 +91,9 @@ const Page = () => {
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Welcome Back to True Feedback
+            Welcome to True Feedback
           </h1>
-          <p className="mb-4">Sign in to continue your secret conversations</p>
+          <p className="mb-4">Sign Up to start your secret conversations</p>
         </div>
 
         <Form {...form}>
@@ -106,7 +106,7 @@ const Page = () => {
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="username"
+                      placeholder="Username"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -131,7 +131,7 @@ const Page = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" {...field} />
+                    <Input placeholder="Email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,7 +145,7 @@ const Page = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
+                    <Input type="Password" placeholder="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -158,7 +158,7 @@ const Page = () => {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
                 </>
               ) : (
-                'SignUp'
+                'Sign Up'
               )}
             </Button>
           </form>
@@ -166,9 +166,9 @@ const Page = () => {
 
         <div className="text-center mt-4">
           <p>
-            Not a member yet?{' '}
-            <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+              Sign In 
             </Link>
           </p>
         </div>
