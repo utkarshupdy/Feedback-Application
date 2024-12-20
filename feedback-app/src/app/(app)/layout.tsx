@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
-import "./globals.css";
+// import "./globals.css";
 import AuthProvider from "@/context/Auth-Provider";
 import dbConnect from "@/lib/dbConnect";
 import { Toaster } from "@/components/ui/toaster";
