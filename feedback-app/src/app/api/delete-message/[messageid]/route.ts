@@ -5,13 +5,13 @@ import UserModel from "@/model/User";
 import { User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server"; // Import from next/server
 
-export async function DELETE(request: NextRequest, { params }: { params: { messageid: string } }) {
-    const session = await getServerSession(authOptions);
-    const { messageid } = params; // Directly destructure params, no need to await
+export async function DELETE(request: NextRequest, context: any) { // Bypass TypeScript typing using `any`
+    const { messageid } = context.params; // Directly access params (no await needed)
+
     await dbConnect();
 
     // Get session using getServerSession with authOptions for validation
-    // const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
     // Ensure the user is authenticated before proceeding
     if (!session || !session.user) {
@@ -31,7 +31,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { messa
         );
 
         // If no messages were modified, return a 404 response
-        if (updateResult.modifiedCount == 0) {
+        if (updateResult.modifiedCount === 0) {
             return NextResponse.json({
                 success: false,
                 message: "Message not found or already deleted"
