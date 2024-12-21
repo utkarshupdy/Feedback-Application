@@ -19,7 +19,7 @@ type ToasterToast = ToastProps & {
 }
 
 // Directly define action types as string literal types instead of using a constant
-type ActionType = "ADD_TOAST" | "UPDATE_TOAST" | "DISMISS_TOAST" | "REMOVE_TOAST"
+// type ActionType = "ADD_TOAST" | "UPDATE_TOAST" | "DISMISS_TOAST" | "REMOVE_TOAST"
 
 let count = 0
 
