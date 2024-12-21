@@ -166,7 +166,7 @@ export default function SendMessage() {
                     <Button
                       key={index}
                       variant="outline"
-                      className="mb-2 hover:bg-blue-100 transition-all duration-300 text-black"
+                      className=" hover:bg-blue-100 transition-all duration-300 text-black"
                       onClick={() => handleMessageClick(message)}
                     >
                       {message}
