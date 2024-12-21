@@ -1,126 +1,130 @@
-'use client'
+'use client';
+
 import { MessageCard } from '@/components/MessageCard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast'
+import { useToast } from '@/hooks/use-toast';
 import { Message, User } from '@/model/User';
 
-import { acceptMessageSchema } from '@/schemas/acceptMessageSchema'
-import { ApiResponse } from '@/types/apiResponse'
-import { zodResolver } from '@hookform/resolvers/zod'
-import axios, { AxiosError } from 'axios'
+import { acceptMessageSchema } from '@/schemas/acceptMessageSchema';
+import { ApiResponse } from '@/types/apiResponse';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios, { AxiosError } from 'axios';
 import { Loader2, RefreshCcw } from 'lucide-react';
-import { useSession } from 'next-auth/react'
-import React, { useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useSession } from 'next-auth/react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-const page = () => {
+const Page = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
-  const { toast } = useToast()
+  const { toast } = useToast();
 
-  const handleDeleteMessage = (messageId: string) => {
-    setMessages(messages.filter((message) => message._id !== messageId))
-
-  }
-
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   const form = useForm({
-    resolver: zodResolver(acceptMessageSchema)
-  })
+    resolver: zodResolver(acceptMessageSchema),
+  });
 
-  const { register, watch, setValue } = form;
+  const {watch, setValue } = form;
 
-  const acceptMessages = watch('acceptMessages')
+  const acceptMessages = watch('acceptMessages');
 
   const fetchAcceptMessage = useCallback(async () => {
     setIsSwitchLoading(true);
-
     try {
-      const response = await axios.get<ApiResponse>('/api/accept-messages', { withCredentials: true })
-      console.log(response);
-      setValue('acceptMessages', response.data.isAcceptingMessage)
-
+      const response = await axios.get<ApiResponse>('/api/accept-messages', { withCredentials: true });
+      setValue('acceptMessages', response.data.isAcceptingMessage);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
-        title: "Error",
-        // description: axiosError.response?.data.message || "Failed to fetch message setting",
-        description: "Failed to fetch message setting",
-        variant: "destructive"
-      })
+        title: 'Error',
+        description: axiosError.response?.data.message || 'Failed to fetch message setting',
+        variant: 'destructive',
+      });
     } finally {
       setIsSwitchLoading(false);
     }
+  }, [setValue, toast]);
 
-  }, [setValue, toast])
-
-  const fetchMessages = useCallback(async (refresh: boolean = false) => {
-    setIsLoading(true);
-    setIsSwitchLoading(false);
-    try {
-      const response = await axios.get<ApiResponse>('/api/get-messages', { withCredentials: true })
-      setMessages(response.data.messages || []);
-      if (refresh) {
+  const fetchMessages = useCallback(
+    async (refresh: boolean = false) => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get<ApiResponse>('/api/get-messages', { withCredentials: true });
+        setMessages(response.data.messages || []);
+        if (refresh) {
+          toast({
+            title: 'Refreshed Messages',
+            description: response.data.message,
+            variant: 'default',
+          });
+        }
+      } catch (error) {
+        const axiosError = error as AxiosError<ApiResponse>;
         toast({
-          title: "Refreshed Messages",
-          description: response.data.message,
-          variant: "default"
-        })
+          title: 'Error',
+          description: axiosError.response?.data.message || 'Failed to fetch message setting',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Error",
-        // description: axiosError.response?.data.message || "Failed to fetch message setting",
-        description: axiosError.response?.data.message || "Failed to fetch message setting",
-        variant: "destructive"
-      })
-    } finally {
-      setIsSwitchLoading(false);
-      setIsLoading(false);
-    }
-
-  }, [setIsLoading, setMessages])
+    },
+    [toast]
+  );
 
   useEffect(() => {
     if (!session || !session.user) return;
     fetchMessages();
     fetchAcceptMessage();
-  }, [session, setValue, fetchAcceptMessage, fetchMessages])
+  }, [session, fetchAcceptMessage, fetchMessages]);
 
-  // handle switch change
   const handleSwitchChange = async () => {
     try {
       const response = await axios.post<ApiResponse>('/api/accept-messages', {
-        acceptMessages: !acceptMessages
-      })
+        acceptMessages: !acceptMessages,
+      });
       setValue('acceptMessages', !acceptMessages);
       toast({
-        title: "Updated Accept Messages",
+        title: 'Updated Accept Messages',
         description: response.data.message,
-        variant: "default"
-      })
-
+        variant: 'default',
+      });
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
-        title: "Error",
-        description: axiosError.response?.data.message || "Failed to fetch message setting",
-        variant: "destructive"
-      })
+        title: 'Error',
+        description: axiosError.response?.data.message || 'Failed to update message setting',
+        variant: 'destructive',
+      });
     }
-  }
+  };
+
+  const handleDeleteMessage = (messageId: string) => {
+    setMessages(messages.filter((message) => message._id !== messageId));
+  };
+
+  const copyToClipboard = () => {
+    const { username } = session?.user as User;
+    const baseUrl = `${window.location.protocol}//${window.location.host}`;
+    const profileUrl = `${baseUrl}/u/${username}`;
+    navigator.clipboard.writeText(profileUrl);
+    toast({
+      title: 'URL copied to clipboard',
+      description: 'Profile URL has been copied to clipboard',
+      variant: 'default',
+    });
+  };
 
   if (!session || !session.user) {
     return (
       <div
         className="flex flex-col h-screen bg-cover bg-center bg-no-repeat text-white"
         style={{
-          backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg?t=st=1734782416~exp=1734786016~hmac=1a73074c73a7c5441394f860978ca68d1ddb08a83023fd92c47fa5540f8a7609&w=826')`,
+          backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg')`,
         }}
       >
         <div className="flex flex-col justify-center items-center h-full bg-black bg-opacity-60">
@@ -128,44 +132,16 @@ const page = () => {
           <p className="mb-4 text-xl text-gray-300 text-center">
             You must be logged in to access the dashboard.
           </p>
-          {/* <Button
-            variant="outline"
-            className="text-white bg-transparent border-white hover:bg-white hover:text-black"
-            onClick={() => router.push('/sign-in')} // Navigate to the sign-in page
-          >
-            Login Here
-          </Button> */}
         </div>
       </div>
     );
   }
 
-
-  // build profile url
-  const { username } = session.user as User
-  //TODO : do more research
-  const baseUrl = `${window.location.protocol}//${window.location.host}`
-  const profileUrl = `${baseUrl}/u/${username}`
-
-  //copy to clipboard
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(profileUrl)
-    toast({
-      title: "URL copied to clipboard",
-      description: "Profile URL has been copied to clipboard",
-      variant: "default"
-    })
-  }
-
-
-
-
-
   return (
     <div
       className="min-h-screen p-6 flex flex-col"
       style={{
-        backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg?t=st=1734782416~exp=1734786016~hmac=1a73074c73a7c5441394f860978ca68d1ddb08a83023fd92c47fa5540f8a7609&w=826')`,
+        backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
@@ -179,7 +155,7 @@ const page = () => {
           <div className="flex items-center space-x-4">
             <input
               type="text"
-              value={profileUrl}
+              value={`${window.location.protocol}//${window.location.host}/u/${(session.user as User).username}`}
               disabled
               className="input input-bordered w-full p-2 rounded-md"
             />
@@ -221,7 +197,7 @@ const page = () => {
         <div className="mt-4 max-h-[60vh] overflow-y-auto rounded-lg shadow-lg backdrop-blur-md bg-opacity-80 p-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {messages.length > 0 ? (
-              messages.slice(0, 9).map((message) => (
+              messages.map((message) => (
                 <MessageCard
                   key={message._id}
                   message={message}
@@ -234,10 +210,9 @@ const page = () => {
             )}
           </div>
         </div>
-
       </div>
     </div>
   );
-}
+};
 
-export default page
+export default Page;

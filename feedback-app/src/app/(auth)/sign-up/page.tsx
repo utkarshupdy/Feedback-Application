@@ -46,7 +46,7 @@ const Page = () => {
         // const response = await axios.get(`/api/check-username-unique?username=${debouncedUsername}`);
         const response = await axios.get(`/api/check-username-unique?username=${username}`);
         console.log(response.data.message);
-        let message = response.data.message;
+        const message = response.data.message;
         setUsernameMessage(message);
       } 
       catch (error) {
@@ -75,7 +75,7 @@ const Page = () => {
       router.replace(`/verify-code/${username}`);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
-      let errorMessage = axiosError.response?.data.message;
+      const errorMessage = axiosError.response?.data.message;
       toast({
         title: "Sign up failed",
         description: errorMessage,

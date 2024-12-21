@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
 
 export const runtime = 'edge';
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const prompt =
       "Create a list of three open-ended and engaging questions, use only english ,  formatted as a single string. Make question length shorter min 7 words and max 15 words words only . Each question should be separated by '||'...";
