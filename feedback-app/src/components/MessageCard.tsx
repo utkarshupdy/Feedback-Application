@@ -18,13 +18,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from './ui/button';
-// import { useToast } from '@/components/ui/use-toast';
-// import { ApiResponse } from '@/types/ApiResponse';
-
 import { useToast } from '@/hooks/use-toast';
 import { ApiResponse } from '@/types/apiResponse';
-
-
 
 type MessageCardProps = {
   message: Message;
@@ -43,7 +38,6 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
         title: response.data.message,
       });
       onMessageDelete(message._id);
-
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -52,17 +46,18 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
           axiosError.response?.data.message ?? 'Failed to delete message',
         variant: 'destructive',
       });
-    } 
+    }
   };
 
   return (
     <Card className="card-bordered">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>{message.content}</CardTitle>
+          {/* Updated font size to smaller but bold */}
+          <CardTitle className="text-sm font-bold text-left">{message.content}</CardTitle>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant='destructive'>
+              <Button variant="destructive">
                 <X className="w-5 h-5" />
               </Button>
             </AlertDialogTrigger>
@@ -75,9 +70,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>
-                  Cancel
-                </AlertDialogCancel>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleDeleteConfirm}>
                   Continue
                 </AlertDialogAction>
@@ -85,7 +78,8 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <div className="text-sm">
+        {/* Date section with smaller font */}
+        <div className="text-sm text-right font-bold">
           {dayjs(message.createdAt).format('MMM D, YYYY h:mm A')}
         </div>
       </CardHeader>

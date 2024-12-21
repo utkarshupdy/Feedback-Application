@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth"; // gives session object from backend directly .. so that it doesnot relay on frontend
+import { getServerSession } from "next-auth/next"; // gives session object from backend directly .. so that it doesnot relay on frontend
 // getServerSession also require auth options to verify
 
 import { authOptions } from "../auth/[...nextauth]/options";
@@ -37,11 +37,12 @@ export async function POST(request: Request){
             } , {status: 401})
             
         }
+        console.log(updatedUser);
         return Response.json({
             success: true,
             message: "Message accepting status is updated successfully",
             updatedUser
-        } , {status: 401})
+        } , {status: 202})
         
     } catch (error) {
         console.log("Failed to update user status to accept messages")
@@ -59,6 +60,10 @@ export async function GET(request: Request){
     const session = await getServerSession(authOptions);
     // const user: User = session?.user as User ........... if want to define types
     const user: User = session?.user as User 
+    console.log(user);
+    console.log(session);
+
+    console.log(session?.user);
 
     if(!session || !session.user){
         return Response.json({
@@ -67,9 +72,8 @@ export async function GET(request: Request){
         } , {status: 401})
     }
 
-    const userId = user?._id;
-
     try {
+        const userId = user?._id;
         const foundUser = await UserModel.findById(userId);
         if(!foundUser){
             return Response.json({
@@ -80,8 +84,7 @@ export async function GET(request: Request){
         }
         return Response.json({
             success: true,
-            isAcceptingMessages : foundUser.isAcceptingMessage,
-            message: "User not found"
+            isAcceptingMessage : foundUser.isAcceptingMessage,
         } , {status: 202})
     } catch (error) {
         console.log("Error in getting message accepting messages")

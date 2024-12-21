@@ -37,7 +37,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
         <AuthProvider>
-          <Navbar />
+          {/* <Navbar /> */}
           {children}
           <Toaster />
         </AuthProvider>
