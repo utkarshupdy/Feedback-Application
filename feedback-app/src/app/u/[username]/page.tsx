@@ -91,7 +91,7 @@ export default function SendMessage() {
     <div
       className="relative min-h-screen bg-cover bg-center p-6"
       style={{
-        backgroundImage: 'url(https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg?t=st=1734782416~exp=1734786016~hmac=1a73074c73a7c5441394f860978ca68d1ddb08a83023fd92c47fa5540f8a7609&w=826)', // Your background image URL
+        backgroundImage: 'url(/feedback_image.jpg)', // Your background image URL
       }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>

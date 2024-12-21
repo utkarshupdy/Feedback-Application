@@ -124,7 +124,8 @@ const Page = () => {
       <div
         className="flex flex-col h-screen bg-cover bg-center bg-no-repeat text-white"
         style={{
-          backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg')`,
+          // backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg')`,
+          backgroundImage: `url('/feedback_image.jpg')`,
         }}
       >
         <div className="flex flex-col justify-center items-center h-full bg-black bg-opacity-60">
@@ -141,7 +142,7 @@ const Page = () => {
     <div
       className="min-h-screen p-6 flex flex-col"
       style={{
-        backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg')`,
+        backgroundImage: `url('/feedback_image.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',

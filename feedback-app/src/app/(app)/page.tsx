@@ -4,7 +4,7 @@ import { Mail } from 'lucide-react'; // Assuming you have an icon for messages
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Autoplay from 'embla-carousel-autoplay';
 import messages from '@/messages.json';
-import {} from '../../../public/images/feedback-results-information-satisfeaction.jpg'
+// import {} from '../../../public/images/feedback-results-information-satisfeaction.jpg'
 // import veri
 
 import {
@@ -27,17 +27,23 @@ export default function Home() {
       <main
         className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://img.freepik.com/free-photo/feedback-results-information-satisfeaction_53876-121336.jpg?t=st=1734782416~exp=1734786016~hmac=1a73074c73a7c5441394f860978ca68d1ddb08a83023fd92c47fa5540f8a7609&w=826')`, // Background image URL
+          backgroundImage: `url('/feedback_image.jpg')`, // Background image URL
         }}
       >
-        <section className="text-center mb-8 md:mb-12 bg-black opacity-80 p-6 rounded-lg">
-          <h1 className="text-3xl md:text-5xl font-bold text-white">
-            Dive into the World of Anonymous Feedback
-          </h1>
-          <p className="mt-3 md:mt-4 text-base md:text-lg text-gray-200">
-            True Feedback - Where your identity remains a secret.
-          </p>
-        </section>
+        <section
+    className="text-center mb-8 md:mb-12 p-6 rounded-lg"
+    style={{
+      backdropFilter: 'blur(10px)',
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    }}
+  >
+    <h1 className="text-3xl md:text-5xl font-bold text-amber-300">
+      Dive into the World of Anonymous Feedback
+    </h1>
+    <p className="mt-3 md:mt-4 text-base md:text-lg text-gray-100">
+      True Feedback - Where your identity remains a secret.
+    </p>
+  </section>
 
         {/* Carousel for Messages */}
         <Carousel
