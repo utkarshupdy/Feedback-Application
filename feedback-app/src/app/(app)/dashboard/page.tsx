@@ -148,7 +148,14 @@ const Page = () => {
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-full max-w-6xl mx-auto flex-grow">
+      <div className="bg-black bg-opacity-70 p-6 rounded-lg shadow-lg w-full max-w-6xl mx-auto flex-grow"
+      style={{
+        backdropFilter: 'blur(5px)', // Adds the blur effect
+        backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent black background
+      }}
+      
+      >
+        
         <h1 className="text-4xl font-bold text-white mb-4">User Dashboard</h1>
 
         <div className="mb-6">
@@ -195,7 +202,7 @@ const Page = () => {
           )}
         </Button>
 
-        <div className="mt-4 max-h-[60vh] overflow-y-auto rounded-lg shadow-lg backdrop-blur-md bg-opacity-80 p-4">
+        <div className="mt-4 max-h-[60vh] overflow-y-auto rounded-lg shadow-lg backdrop-blur-sm bg-opacity-20 p-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {messages.length > 0 ? (
               messages.map((message) => (
