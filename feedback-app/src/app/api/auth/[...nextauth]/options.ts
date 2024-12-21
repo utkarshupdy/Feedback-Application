@@ -3,12 +3,9 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/User';
-import { User } from '@/model/User';
+// import { User } from '@/model/User';
 
-interface Credentials {
-  identifier: string; // email or username
-  password: string;
-}
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
