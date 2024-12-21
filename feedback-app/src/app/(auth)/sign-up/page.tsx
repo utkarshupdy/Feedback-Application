@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import Link from 'next/link'
-import { useDebounceCallback, useDebounceValue } from 'usehooks-ts' // Correct usage here
+import { useDebounceCallback } from 'usehooks-ts' // Correct usage here
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from 'next/navigation'
 import { signUpSchema } from '@/schemas/signUpSchema'
