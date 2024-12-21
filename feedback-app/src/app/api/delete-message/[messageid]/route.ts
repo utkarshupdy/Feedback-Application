@@ -5,12 +5,13 @@ import UserModel from "@/model/User";
 import { User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server"; // Import from next/server
 
-export async function DELETE(request: NextRequest, context: { params: { messageid: string } }) {
-    const { messageid } = await context.params; // Await params before accessing messageid
+export async function DELETE(request: NextRequest, { params }: { params: { messageid: string } }) {
+    const session = await getServerSession(authOptions);
+    const { messageid } = params; // Directly destructure params, no need to await
     await dbConnect();
 
     // Get session using getServerSession with authOptions for validation
-    const session = await getServerSession(authOptions);
+    // const session = await getServerSession(authOptions);
 
     // Ensure the user is authenticated before proceeding
     if (!session || !session.user) {
